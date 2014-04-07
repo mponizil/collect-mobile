@@ -1,69 +1,40 @@
 class ViewController < UIViewController
   def viewDidLoad
     super
-
     view.backgroundColor = UIColor.whiteColor
   end
 
   def viewDidAppear(animated)
     if PFUser.currentUser
-      showFeed
+      showMyCollection
     else
-      showLogin
+      @authController = AuthController.alloc.init
+      @authController.delegate = self
+      displayContentController(@authController)
     end
   end
 
-  def showFeed
-    query = PFQuery.queryWithClassName('Item')
-    query.whereKey('collector', equalTo: PFUser.currentUser)
-    query.findObjectsInBackgroundWithBlock(lambda do |items, error|
-
-      @items = items
-
-      @dataTable = UITableView.alloc.initWithFrame(CGRectMake(0, 40, view.frame.size.width,
-        view.frame.size.height - 40), style: UITableViewStylePlain)
-      @dataTable.delegate = self
-      @dataTable.dataSource = self
-      @dataTable.backgroundView = nil
-      view.addSubview(@dataTable)
-
-    end)
+  def showMyCollection
+    @myCollectionController = MyCollectionController.alloc.init
+    @navigationController = UINavigationController.alloc.initWithRootViewController(@myCollectionController)
+    displayContentController(@navigationController)
   end
 
-  def tableView(tableView, numberOfRowsInSection: section)
-    @items.count
+  def authController(authController, didLogInUser: user)
+    hideContentController(@authController)
   end
 
-  def tableView(tableView, cellForRowAtIndexPath: indexPath)
-    @reuseIdentifier ||= 'cell'
-
-    cell = tableView.dequeueReusableCellWithIdentifier(@reuseIdentifier) || begin
-      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleValue1, reuseIdentifier: @reuseIdentifier)
-    end
-
-    item = @items[indexPath.row]
-    imageURL = NSURL.URLWithString(item['image'])
-    imageData = NSData.dataWithContentsOfURL(imageURL)
-    cell.imageView.setImage(UIImage.alloc.initWithData(imageData))
-    cell.textLabel.text = item['title']
-    cell.detailTextLabel.text = item['url']
-
-    cell
+  def displayContentController(content)
+    addChildViewController(content)
+    @currentClientView = content.view
+    content.view.frame = view.frame
+    view.addSubview(@currentClientView)
+    content.didMoveToParentViewController(self)
   end
 
-  def showLogin
-    @login = LogInViewController.alloc.init
-    @login.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton
-    @login.delegate = self
-
-    @login.signUpController = SignUpViewController.alloc.init
-    @login.signUpController.fields = PFSignUpFieldsUsernameAndPassword | PFSignUpFieldsSignUpButton | PFSignUpFieldsDismissButton
-    @login.signUpController.delegate = self
-
-    self.presentViewController(@login, animated: true, completion: nil)
-  end
-
-  def logInViewController(logInViewController, didLogInUser: user)
-    self.dismissViewControllerAnimated(true, completion: nil)
+  def hideContentController(content)
+    content.willMoveToParentViewController(nil)
+    content.view.removeFromSuperview
+    content.removeFromParentViewController
   end
 end
