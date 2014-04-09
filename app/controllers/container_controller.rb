@@ -10,21 +10,21 @@ class ContainerController < UIViewController
     else
       @authController = AuthController.alloc.init
       @authController.delegate = self
-      displayContentController(@authController)
+      addContentController(@authController)
     end
   end
 
   def showMyCollection
     @myCollectionController = MyCollectionController.alloc.init
     @navigationController = UINavigationController.alloc.initWithRootViewController(@myCollectionController)
-    displayContentController(@navigationController)
+    addContentController(@navigationController)
   end
 
   def authController(authController, didLogInUser: user)
-    hideContentController(@authController)
+    removeContentController(@authController)
   end
 
-  def displayContentController(contentController)
+  def addContentController(contentController)
     addChildViewController(contentController)
     @currentClientView = contentController.view
     contentController.view.frame = view.frame
@@ -32,7 +32,7 @@ class ContainerController < UIViewController
     contentController.didMoveToParentViewController(self)
   end
 
-  def hideContentController(contentController)
+  def removeContentController(contentController)
     contentController.willMoveToParentViewController(nil)
     contentController.view.removeFromSuperview
     contentController.removeFromParentViewController
