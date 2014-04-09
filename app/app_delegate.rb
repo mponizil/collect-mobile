@@ -5,8 +5,8 @@ class AppDelegate
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.makeKeyAndVisible
 
-    @viewController = ViewController.alloc.init
-    @window.rootViewController = @viewController
+    @containerController = ContainerController.alloc.init
+    @window.rootViewController = @containerController
 
     true
   end

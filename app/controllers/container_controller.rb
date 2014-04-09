@@ -1,4 +1,4 @@
-class ViewController < UIViewController
+class ContainerController < UIViewController
   def viewDidLoad
     super
     view.backgroundColor = UIColor.whiteColor
@@ -24,17 +24,17 @@ class ViewController < UIViewController
     hideContentController(@authController)
   end
 
-  def displayContentController(content)
-    addChildViewController(content)
-    @currentClientView = content.view
-    content.view.frame = view.frame
+  def displayContentController(contentController)
+    addChildViewController(contentController)
+    @currentClientView = contentController.view
+    contentController.view.frame = view.frame
     view.addSubview(@currentClientView)
-    content.didMoveToParentViewController(self)
+    contentController.didMoveToParentViewController(self)
   end
 
-  def hideContentController(content)
-    content.willMoveToParentViewController(nil)
-    content.view.removeFromSuperview
-    content.removeFromParentViewController
+  def hideContentController(contentController)
+    contentController.willMoveToParentViewController(nil)
+    contentController.view.removeFromSuperview
+    contentController.removeFromParentViewController
   end
 end
