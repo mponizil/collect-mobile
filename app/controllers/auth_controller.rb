@@ -1,10 +1,6 @@
 class AuthController < UIViewController
   attr_accessor :delegate
 
-  def viewDidLoad
-    super
-  end
-
   def viewDidAppear(animated)
     @loginController = LogInViewController.alloc.init
     @loginController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsSignUpButton
