@@ -1,9 +1,8 @@
 class ContainerViewController < UIViewController
   def addContentController(contentController)
     addChildViewController(contentController)
-    @currentClientView = contentController.view
     contentController.view.frame = view.frame
-    view.addSubview(@currentClientView)
+    view.addSubview(contentController.view)
     contentController.didMoveToParentViewController(self)
   end
 
