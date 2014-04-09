@@ -1,9 +1,4 @@
 class MainViewController < ContainerViewController
-  def viewDidLoad
-    super
-    view.backgroundColor = UIColor.whiteColor
-  end
-
   def viewDidAppear(animated)
     if PFUser.currentUser
       showMyCollection
