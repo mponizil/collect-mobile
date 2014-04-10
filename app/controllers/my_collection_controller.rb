@@ -22,7 +22,6 @@ class MyCollectionController < UITableViewController
   end
 
   def fetchItems
-    puts 'fetching items'
     query = PFQuery.queryWithClassName('Item')
     query.whereKey('collector', equalTo: PFUser.currentUser)
     query.findObjectsInBackgroundWithBlock(lambda do |items, error|
@@ -50,6 +49,14 @@ class MyCollectionController < UITableViewController
     cell.detailTextLabel.text = item['url']
 
     cell
+  end
+
+  def tableView(tableView, didSelectRowAtIndexPath: indexPath)
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+
+    item = @items[indexPath.row]
+    viewItemController = ViewItemController.alloc.initWithItem(item)
+    navigationController.pushViewController(viewItemController, animated: true)
   end
 
   def refreshView(refresh)
