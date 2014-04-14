@@ -18,19 +18,19 @@ class ViewItemController < UIViewController
     image = UIImage.alloc.initWithData(imageData)
     @imageView = UIImageView.alloc.initWithImage(image)
     @imageView.contentMode = UIViewContentModeScaleAspectFit
-    @imageView.frame = [[0, NAVIGATION_BAR_HEIGHT + 20], [view.frame.size.width, 200]]
+    @imageView.frame = [[0, NAVIGATION_BAR_HEIGHT + 20], [view.frame.size.width, 300]]
     view.addSubview(@imageView)
 
-    titleY = NAVIGATION_BAR_HEIGHT + @imageView.frame.size.height
+    titleY = @imageView.frame.origin.y + @imageView.frame.size.height
     @titleView = UILabel.alloc.initWithFrame [[0, titleY], [view.frame.size.width, 100]]
     @titleView.text = @item['title']
     @titleView.numberOfLines = 0
     @titleView.textAlignment = NSTextAlignmentCenter
     view.addSubview(@titleView)
 
-    priceY = NAVIGATION_BAR_HEIGHT + @imageView.frame.size.height + @titleView.frame.size.height
+    priceY = @titleView.frame.origin.y + @titleView.frame.size.height
     @priceView = UILabel.alloc.initWithFrame [[0, priceY], [view.frame.size.width, 100]]
-    @priceView.text = "$" + @item['price'].round(2).stringValue
+    @priceView.text = "$%.2f" % @item['price']
     @priceView.setFont(UIFont.italicSystemFontOfSize(14))
     @priceView.textAlignment = NSTextAlignmentCenter
     view.addSubview(@priceView)

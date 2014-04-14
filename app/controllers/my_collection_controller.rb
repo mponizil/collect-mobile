@@ -1,4 +1,6 @@
 class MyCollectionController < UITableViewController
+  attr_accessor :delegate
+
   def viewDidLoad
     super
 
@@ -15,10 +17,19 @@ class MyCollectionController < UITableViewController
     @dataTable.dataSource = self
     @dataTable.backgroundView = nil
     view.addSubview(@dataTable)
+
+    logout = UIBarButtonItem.alloc.initWithTitle('Logout', style: UIBarButtonItemStylePlain, target: self, action: 'logout')
+    navigationItem.rightBarButtonItem = logout
   end
 
   def viewDidAppear(animated)
     fetchItems
+  end
+
+  def logout
+    user = PFUser.currentUser
+    PFUser.logOut
+    delegate.myCollectionController(self, didLogOutUser: user)
   end
 
   def fetchItems

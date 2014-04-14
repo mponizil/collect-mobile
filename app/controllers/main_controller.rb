@@ -11,8 +11,13 @@ class MainViewController < ContainerViewController
 
   def showMyCollection
     @myCollectionController = MyCollectionController.alloc.init
+    @myCollectionController.delegate = self
     @navigationController = UINavigationController.alloc.initWithRootViewController(@myCollectionController)
     addContentController(@navigationController)
+  end
+
+  def myCollectionController(myCollectionController, didLogOutUser: user)
+    removeContentController(@myCollectionController)
   end
 
   def authController(authController, didLogInUser: user)
