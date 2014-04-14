@@ -27,6 +27,13 @@ class ViewItemController < UIViewController
     @titleView.numberOfLines = 0
     @titleView.textAlignment = NSTextAlignmentCenter
     view.addSubview(@titleView)
+
+    priceY = NAVIGATION_BAR_HEIGHT + @imageView.frame.size.height + @titleView.frame.size.height
+    @priceView = UILabel.alloc.initWithFrame [[0, priceY], [view.frame.size.width, 100]]
+    @priceView.text = "$" + @item['price'].round(2).stringValue
+    @priceView.setFont(UIFont.italicSystemFontOfSize(14))
+    @priceView.textAlignment = NSTextAlignmentCenter
+    view.addSubview(@priceView)
   end
 
   def viewDidAppear(animated)
