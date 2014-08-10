@@ -35,6 +35,7 @@ class MyCollectionController < UITableViewController
   def fetchItems
     query = PFQuery.queryWithClassName('Item')
     query.whereKey('collector', equalTo: PFUser.currentUser)
+    query.orderByDescending('createdAt')
     query.findObjectsInBackgroundWithBlock(lambda do |items, error|
       @items = items
       @dataTable.reloadData
